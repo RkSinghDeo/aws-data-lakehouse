@@ -1,0 +1,34 @@
+name: lakehouse
+version: '1.0.0'
+config-version: 2
+
+profile: lakehouse_redshift
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+analysis-paths: ["analyses"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  lakehouse:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: ephemeral
+    marts:
+      +schema: marts
+      +materialized: table
+      finance:
+        +tags: ["finance", "daily"]
+      operations:
+        +tags: ["operations", "daily"]
+
+vars:
+  start_date: '2024-01-01'
+  data_source: 'iceberg_gold'
